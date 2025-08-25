@@ -7,12 +7,11 @@ from datetime import datetime
 
 # Create a new task
 async def create_task(db: AsyncSession, task: TaskCreate):
-    new_task = Task(**task.dict())
+    new_task = Task(**task.model_dump())
     db.add(new_task)
     await db.commit()
     await db.refresh(new_task)
     return new_task
-
 
 # Get a single task by ID
 async def get_task(db: AsyncSession, task_id: int):

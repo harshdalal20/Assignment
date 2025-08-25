@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
-from app import models, schemas, crud, database
+from . import models, schemas, crud, database
 from datetime import datetime
 from contextlib import asynccontextmanager
 

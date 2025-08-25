@@ -5,12 +5,15 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql+asyncpg://postgres:Dalal1024@localhost:5432/taskdb")
 
 engine = create_async_engine(DATABASE_URL, echo=True)
-AsyncSessionLocal = sessionmaker(bind=engine, class_= AsyncSession, expire_on_commit=False)
+async_session = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False, autoflush=False, autocommit=False)
 Base = declarative_base()
 
 async def get_db():
-    async with AsyncSessionLocal() as session:
-        yield session
+    async with async_session() as session:
+        try:
+            yield session
+        finally:
+            await session.close()
